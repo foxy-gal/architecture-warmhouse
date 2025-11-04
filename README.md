@@ -1,7 +1,4 @@
 # Задание 1. Анализ и планирование
-<aside>
-Чтобы составить документ с описанием текущей архитектуры приложения, можно часть информации взять из описания компании и условия задания. Это нормально.
-</aside>
 
 ### 1. Описание функциональности монолитного приложения
 
@@ -28,7 +25,7 @@
 
 - Управление устройствами
 - Мониторинг/телеметрия
-- Сценарии работы
+- Сценарии умного дома
 - Личный кабинет Пользователя
 
 ### **4. Проблемы монолитного решения**
@@ -39,9 +36,7 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-```markdown
 [Context diagram AS IS](https://www.plantuml.com/plantuml/svg/hP71IiD048RlUOguU4YXRGZq90ZL87XG2AQUmpPPxE9c4dOtI14llUexUF05H1GLKvzXyaPkshHQ5IpgQIQJR_xzsEqhJQKkKc7xlMXFi9I1LjO6XrWK2RD7MkTgotKbFUkUS3qgXeLYCiv06wuRPwcR2mhrVaVfHF2Xw_SwGJqwFZnmKweqasOK-MQ3Sc2ocnlMiW8cLGPEFYixWbFLjWbUuok-L5VuQEeTtbOJVAY_ISiAnoOfZNQp0X8gnqxirVmDbZYjBl7PndkpKfAslIaud6wJXVVS-ITHqZgtbePElEWQhs_F8LYQRbeBurCrCOeNZQIZ6AXC6YISDR-NMWtqbecHzr-Py9u9VyWyOcBrARzSuVvW48GD-VddN6Kjo5kBWWzKdq5YlDy0)
-```
 
 # Задание 2. Проектирование микросервисной архитектуры
 
