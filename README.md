@@ -46,18 +46,8 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-Добавьте сюда диаграмму контекста в модели C4.
-
-Чтобы добавить ссылку в файл Readme.md, нужно использовать синтаксис Markdown. Это делают так:
-
 ```markdown
-[Текст ссылки](URL)
-```
-
-Замените `Текст ссылки` текстом, который хотите использовать для ссылки. Вместо `URL` вставьте адрес, на который должна вести ссылка. Например:
-
-```markdown
-[Посетите Яндекс](https://ya.ru/)
+[Context diagram AS IS](https://www.plantuml.com/plantuml/svg/hP71IiD048RlUOguU4YXRGZq90ZL87XG2AQUmpPPxE9c4dOtI14llUexUF05H1GLKvzXyaPkshHQ5IpgQIQJR_xzsEqhJQKkKc7xlMXFi9I1LjO6XrWK2RD7MkTgotKbFUkUS3qgXeLYCiv06wuRPwcR2mhrVaVfHF2Xw_SwGJqwFZnmKweqasOK-MQ3Sc2ocnlMiW8cLGPEFYixWbFLjWbUuok-L5VuQEeTtbOJVAY_ISiAnoOfZNQp0X8gnqxirVmDbZYjBl7PndkpKfAslIaud6wJXVVS-ITHqZgtbePElEWQhs_F8LYQRbeBurCrCOeNZQIZ6AXC6YISDR-NMWtqbecHzr-Py9u9VyWyOcBrARzSuVvW48GD-VddN6Kjo5kBWWzKdq5YlDy0)
 ```
 
 # Задание 2. Проектирование микросервисной архитектуры
@@ -66,7 +56,7 @@
 
 **Диаграмма контейнеров (Containers)**
 
-Добавьте диаграмму.
+[Context diagram TO BE](https://www.plantuml.com/plantuml/svg/hLBDgjD05DxdAM9maGltDWJkIX2AHNIXK6nTXsaojA6JIPYP84K4hQ0B1H_0XQWlK8l1rFxu2cVUo3E9JMkb5QgRplHyF-SxSzAMYWYL9ypkN0Tt6KqeLzAw4VEGvH6rHqfbyfRd2VAaDOpLA1_aaeemvGfvhJ1Dl8mHRlHNKaKi7dYTwwkkAJr--C1BY5HKO2dee8B4d8fMXbpBwb8XK-vcrN5fE_01Dh3KR-4RddEOwIaKvhzpOVKcQ984TzASHqHCtD0t_C-mWhL-0miRlg9avLpQDrdCnxUTRUGwxjyoEXTFhIQSoyR6-psK-lNM_JlCu0kKi8P2Jns4xwNc5uFjP0dXP4ZhM3_qSrJCOGa5QaeeRFrIlz1JB6zWOMvcFanV7Z5Jr6n1YOdn-mI5SK9wKLcK-jqHcGmf9o9EZUgZVbLrdnd5GQCpXttsQm-kf5oc0ekzwdB-k_zkw3UEWV-_FFdEa_-3voFAcW-rUhFx_NwtLmFDwkkE1w1XRmb_0FjxFiIQPPvgvfz4-HxQfZp2yNu2)
 
 **Диаграмма компонентов (Components)**
 
