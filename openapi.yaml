@@ -1,0 +1,286 @@
+openapi: 3.0.3
+info:
+  title: SmartHome REST API
+  version: 1.0.0
+  description: |
+    Синхронные методы для клиент–сервера. Аутентификация — Bearer JWT.
+
+servers:
+  - url: https://api.example.com
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Devices
+  - name: Commands
+
+paths:
+  /api/v1/devices:
+    get:
+      tags: [Devices]
+      operationId: listDevices
+      summary: Список устройств пользователя
+      description: Возвращает устройства в пределах дома с пагинацией.
+      parameters:
+        - in: query
+          name: householdId
+          required: true
+          description: ИД домохозяйства
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: status
+          description: Фильтр по статусу
+          schema:
+            type: string
+            enum: [online, offline, unknown]
+        - in: query
+          name: cursor
+          description: Курсор постраничной выборки
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Кол-во элементов на страницу (1..200)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+        - in: header
+          name: X-Correlation-Id
+          required: false
+          description: Идентификатор корреляции для трассировки
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ОК
+          headers:
+            X-Correlation-Id:
+              description: Отражает корреляцию запроса
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DevicePage"
+              examples:
+                ok:
+                  value:
+                    items:
+                      - id: "3d3e5d6a-4a9a-48fb-9b1e-1d9d5a9c1111"
+                        name: "Реле у ворот"
+                        model: "acme.relay.v2"
+                        status: "online"
+                        lastSeen: "2025-11-07T08:52:12Z"
+                      - id: "c1d3b6b0-2b56-4c9c-98ad-0f2eb2f02222"
+                        name: "Термодатчик гостиной"
+                        model: "acme.temp.v1"
+                        status: "offline"
+                        lastSeen: "2025-11-06T19:01:00Z"
+                    nextCursor: "eyJwYWdlIjoyfQ=="
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /api/v1/devices/{deviceId}/commands:
+    post:
+      tags: [Commands]
+      operationId: sendDeviceCommand
+      summary: Отправка команды устройству
+      description: >
+        Создаёт команду и инициирует доставку на устройство. Идемпотентность по заголовку Idempotency-Key.
+      parameters:
+        - in: path
+          name: deviceId
+          required: true
+          description: ИД устройства
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Idempotency-Key
+          required: false
+          description: Ключ идемпотентности для безопасного повтора POST
+          schema:
+            type: string
+            minLength: 8
+            maxLength: 128
+        - in: header
+          name: X-Correlation-Id
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommandRequest"
+            examples:
+              setRelayOn:
+                value:
+                  command: "setRelay"
+                  args: { relay: 1, state: true }
+      responses:
+        "201":
+          description: Команда создана
+          headers:
+            Location:
+              description: URI ресурса команды для последующего опроса статуса
+              schema:
+                type: string
+                format: uri
+            X-Correlation-Id:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Command"
+              examples:
+                created:
+                  value:
+                    id: "7c1b9b0d-6d6c-4f77-b0c6-0f9a0a333333"
+                    deviceId: "3d3e5d6a-4a9a-48fb-9b1e-1d9d5a9c1111"
+                    type: "setRelay"
+                    payload: { relay: 1, state: true }
+                    status: "queued"
+                    createdAt: "2025-11-07T09:10:00Z"
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/TooManyRequests" }
+        "500": { $ref: "#/components/responses/ServerError" }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Device:
+      type: object
+      required: [id, name, model, status, lastSeen]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, maxLength: 200 }
+        model: { type: string }
+        status: { type: string, enum: [online, offline, unknown] }
+        lastSeen: { type: string, format: date-time }
+
+    DevicePage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Device"
+        nextCursor:
+          type: string
+          nullable: true
+          description: Верните в параметре `cursor` для следующей страницы
+
+    CommandRequest:
+      type: object
+      required: [command]
+      properties:
+        command:
+          type: string
+          enum: [reboot, setMode, setRelay, ping]
+        args:
+          type: object
+          additionalProperties: true
+      description: Аргументы зависят от типа команды.
+
+    Command:
+      type: object
+      required: [id, deviceId, type, status, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        deviceId: { type: string, format: uuid }
+        type: { type: string }
+        payload: { type: object, additionalProperties: true }
+        status:
+          type: string
+          enum: [queued, sent, acked, failed]
+        createdAt: { type: string, format: date-time }
+
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        details: { type: object, additionalProperties: true }
+        traceId: { type: string }
+
+  responses:
+    BadRequest:
+      description: Неверный запрос
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Не авторизован
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Нет доступа
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Не найдено
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Conflict:
+      description: Конфликт состояния ресурса
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unprocessable:
+      description: Ошибка валидации/бизнес-правил
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    TooManyRequests:
+      description: Превышен лимит запросов
+      headers:
+        Retry-After:
+          description: Кол-во секунд до повтора
+          schema:
+            type: integer
+            minimum: 1
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServerError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
