@@ -2,11 +2,10 @@ openapi: 3.0.3
 info:
   title: SmartHome REST API
   version: 1.0.0
-  description: |
-    Синхронные методы для клиент–сервера. Аутентификация — Bearer JWT.
+  description: Синхронные методы для клиент–сервера. Аутентификация — Bearer JWT.
 
 servers:
-  - url: https://api.example.com
+  - url: 
 
 security:
   - bearerAuth: []
