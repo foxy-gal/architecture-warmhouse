@@ -72,7 +72,7 @@
 ### 2. Документация API
 
 1) [AsyncAPI](https://github.com/foxy-gal/architecture-warmhouse/blob/warmhouse/asyncapi.json) 
-2) [OpenAPI]()
+2) [OpenAPI](https://github.com/foxy-gal/architecture-warmhouse/blob/warmhouse/openapi.yaml)
 
 # Задание 5. Работа с docker и docker-compose
 
