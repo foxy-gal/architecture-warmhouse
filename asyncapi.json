@@ -1,0 +1,241 @@
+{
+  "asyncapi": "3.0.0",
+  "id": "urn:ru:smarthome:cloud:device-api",
+  "info": {
+    "title": "Device MQTT operations (cloud app)",
+    "version": "1.0.0"
+  },
+  "defaultContentType": "application/json",
+  "servers": {
+    "mqttBroker": {
+      "host": "mqtt.example.com:8883",
+      "protocol": "mqtt",
+      "protocolVersion": "5",
+      "security": [
+        {
+          "$ref": "#/components/securitySchemes/mTls"
+        },
+        {
+          "$ref": "#/components/securitySchemes/userPass"
+        }
+      ]
+    }
+  },
+  "channels": {
+    "telemetry": {
+      "address": "devices/{deviceId}/telemetry",
+      "parameters": {
+        "deviceId": {
+          "$ref": "#/components/parameters/deviceId"
+        }
+      },
+      "messages": {
+        "telemetry": {
+          "$ref": "#/components/messages/TelemetryV1"
+        }
+      }
+    },
+    "deviceCmd": {
+      "address": "devices/{deviceId}/cmd",
+      "parameters": {
+        "deviceId": {
+          "$ref": "#/components/parameters/deviceId"
+        }
+      },
+      "messages": {
+        "command": {
+          "$ref": "#/components/messages/DeviceCommandV1"
+        }
+      }
+    },
+    "cmdAck": {
+      "address": null,
+      "messages": {
+        "ack": {
+          "$ref": "#/components/messages/DeviceCommandAckV1"
+        }
+      }
+    }
+  },
+  "operations": {
+    "receiveTelemetry": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/telemetry"
+      },
+      "summary": "Получение телеметрии от устройств",
+      "bindings": {
+        "mqtt": {
+          "qos": 1
+        }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/telemetry/messages/telemetry"
+        }
+      ]
+    },
+    "sendDeviceCommand": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/deviceCmd"
+      },
+      "summary": "Отправка команды устройству с ожиданием ACK",
+      "bindings": {
+        "mqtt": {
+          "qos": 1,
+          "retain": false
+        }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/deviceCmd/messages/command"
+        }
+      ],
+      "reply": {
+        "address": {
+          "location": "$message.header#/responseTopic"
+        },
+        "channel": {
+          "$ref": "#/channels/cmdAck"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/cmdAck/messages/ack"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "mTls": {
+        "type": "X509",
+        "description": "mTLS между приложением и брокером"
+      },
+      "userPass": {
+        "type": "userPassword"
+      }
+    },
+    "parameters": {
+      "deviceId": {
+        "description": "Идентификатор устройства, подставляется в адрес канала",
+        "examples": [
+          "dev-123"
+        ]
+      }
+    },
+    "messages": {
+      "TelemetryV1": {
+        "name": "TelemetryV1",
+        "title": "Телеметрия устройства",
+        "contentType": "application/json",
+        "payload": {
+          "type": "object",
+          "required": [
+            "deviceId",
+            "ts",
+            "metrics"
+          ],
+          "properties": {
+            "deviceId": {
+              "type": "string"
+            },
+            "ts": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "metrics": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "attrs": {
+              "type": "object",
+              "additionalProperties": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "DeviceCommandV1": {
+        "name": "DeviceCommandV1",
+        "title": "Команда устройству",
+        "contentType": "application/json",
+        "headers": {
+          "type": "object",
+          "properties": {
+            "responseTopic": {
+              "description": "MQTT 5 Response Topic для ACK",
+              "type": "string"
+            },
+            "correlationId": {
+              "description": "Идентификатор корреляции",
+              "type": "string"
+            }
+          }
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "command"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "reboot",
+                "setMode",
+                "setRelay",
+                "ping"
+              ]
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "DeviceCommandAckV1": {
+        "name": "DeviceCommandAckV1",
+        "title": "Подтверждение команды",
+        "contentType": "application/json",
+        "headers": {
+          "type": "object",
+          "properties": {
+            "correlationId": {
+              "description": "Совпадает с исходным запросом",
+              "type": "string"
+            }
+          }
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "accepted",
+                "completed",
+                "failed"
+              ]
+            },
+            "error": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
