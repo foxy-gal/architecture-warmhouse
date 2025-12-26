@@ -1,90 +1,78 @@
-# Project_template
-
-Это шаблон для решения проектной работы. Структура этого файла повторяет структуру заданий. Заполняйте его по мере работы над решением.
-
 # Задание 1. Анализ и планирование
-
-<aside>
-
-Чтобы составить документ с описанием текущей архитектуры приложения, можно часть информации взять из описания компании и условия задания. Это нормально.
-
-</aside
 
 ### 1. Описание функциональности монолитного приложения
 
 **Управление отоплением:**
 
-- Пользователи могут…
-- Система поддерживает…
-- …
+- Пользователи могут удалённо включать/выключать отопление в своих домах.
+- Система поддерживает удаленное включение/выключение отопления в домах.
 
 **Мониторинг температуры:**
 
-- Пользователи могут…
-- Система поддерживает…
-- …
+- Пользователи могут просматривать текущую температуру в своих домах через веб-интерфейс.
+- Система поддерживает удаленный просмотр температуры через веб-интерфейс
 
 ### 2. Анализ архитектуры монолитного приложения
 
-Перечислите здесь основные особенности текущего приложения: какой язык программирования используется, какая база данных, как организовано взаимодействие между компонентами и так далее.
+- Язык программирования: Go
+- База данных: PostgreSQL
+- Архитектура: Монолитная, все компоненты системы (обработка запросов, бизнес-логика, работа с данными) находятся в рамках одного приложения.
+- Взаимодействие: Синхронное, запросы обрабатываются последовательно.
+- Масштабируемость: Ограничена, так как монолит сложно масштабировать по частям.
+- Развертывание: Требует остановки всего приложения.
 
 ### 3. Определение доменов и границы контекстов
 
-Опишите здесь домены, которые вы выделили.
+- Управление устройствами
+- Мониторинг/телеметрия
+- Сценарии умного дома
+- Личный кабинет Пользователя
 
 ### **4. Проблемы монолитного решения**
 
-- …
-- …
-- …
-
-Если вы считаете, что текущее решение не вызывает проблем, аргументируйте свою позицию.
+- Сложности с маштабированием
+- Синхронность
+- Управление от сервера к датчику
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-Добавьте сюда диаграмму контекста в модели C4.
-
-Чтобы добавить ссылку в файл Readme.md, нужно использовать синтаксис Markdown. Это делают так:
-
-```markdown
-[Текст ссылки](URL)
-```
-
-Замените `Текст ссылки` текстом, который хотите использовать для ссылки. Вместо `URL` вставьте адрес, на который должна вести ссылка. Например:
-
-```markdown
-[Посетите Яндекс](https://ya.ru/)
-```
+[Context diagram AS IS](https://www.plantuml.com/plantuml/svg/hP71IiD048RlUOguU4YXRGZq90ZL87XG2AQUmpPPxE9c4dOtI14llUexUF05H1GLKvzXyaPkshHQ5IpgQIQJR_xzsEqhJQKkKc7xlMXFi9I1LjO6XrWK2RD7MkTgotKbFUkUS3qgXeLYCiv06wuRPwcR2mhrVaVfHF2Xw_SwGJqwFZnmKweqasOK-MQ3Sc2ocnlMiW8cLGPEFYixWbFLjWbUuok-L5VuQEeTtbOJVAY_ISiAnoOfZNQp0X8gnqxirVmDbZYjBl7PndkpKfAslIaud6wJXVVS-ITHqZgtbePElEWQhs_F8LYQRbeBurCrCOeNZQIZ6AXC6YISDR-NMWtqbecHzr-Py9u9VyWyOcBrARzSuVvW48GD-VddN6Kjo5kBWWzKdq5YlDy0)
 
 # Задание 2. Проектирование микросервисной архитектуры
 
-В этом задании вам нужно предоставить только диаграммы в модели C4. Мы не просим вас отдельно описывать получившиеся микросервисы и то, как вы определили взаимодействия между компонентами To-Be системы. Если вы правильно подготовите диаграммы C4, они и так это покажут.
-
 **Диаграмма контейнеров (Containers)**
 
-Добавьте диаграмму.
+[Containers diagram TO BE](https://www.plantuml.com/plantuml/svg/hPFTQXD15CVlzodMnOijj0aHhmIXD0MzCB1jLhmCazqXNRex4sPcaI12ZQ0N2Y9uvuMeBn2BY-b7wYkSUIFdJ3VPhTjG_BYQcVC_vyV_p9pPbee8bMUfSojXKPh7r3rGQYpljTk2F6sD4dMG3tD9HSIPeaor8fwrnobXMBCbLPmcmtRtxbQ0eSUzH-sCI4M52Gswfe8aZ8hM6FbEG8Nap1_RPTFru1DSm9b-2p_CUWmpFOK2pzw6qvyOI3ROuJcBYPZuKGVply8vBFGRE77XkoavzpRTssd23kzxIykNTc_ow6qySrRc_FGGsHzXhbylwQSmWsymXmKKUkePUP-IIE76UAigCyB8Y5uw-wcFJD4nd9aU5gQqSFLB_K9FJVW2Jd27BPe6veXvm1imHLEQKIKcoFi21P9CUc4HS_tk-hBTeHyFiU8zV40ju5AD1BqshSVPYDToxNbtPttkdPkJVHbHHaHYkP_rAzlz31qt6_s3-swMxUKqftvlBmojANkjfoRz21FBvEVbtFYICic52VRjvk_dv2gmio8EEl-BoIec-mUciq_JrS-oD_mm38E-KL30G3ciJQ4QlAPMUzswj6ILpu5BgU2sZcoATMPJipUnNkcibzXLgMQXclnoYDqdYQ1k8BZY4Kz_wyb-fx0RbE7ARVKfrdASRSfYyqQ_0000)
 
 **Диаграмма компонентов (Components)**
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+[Components diagram TO BE "Управление устройствами"](https://www.plantuml.com/plantuml/svg/RLHTQnf157ttLqnzMadDllIfJsarf2c6h1-XZxBge4jrTpixcrHA8Hfe7ooKXa1B2msqVq1jHAE9-Gjt_b7ldTsOZKWWEkCzvzmvzypi1D8MCkoqKqySjzuE6vorfFI3vwOfx9FjfYDROIqCkAXxhkIktAvx7TDlsovXie5ij9sQcNkMjMZhwA1WTkn0Se5RrPpNyJsNC3xnfomk0iyrYEmfIyCbB66Xli0KFySmL7sOq3gTIULGodPSBepsssheKF4lcAdFSAi6SCrW3aCOmGnkOQBwQVovnEswf2zmZYIZB5OiyFS90lf9ldpDy9jKzWqkgDpo0jaKl5miQF0VTGf3P9tY_xdwX0nBN97eXC4L_HGlr9dggJvMB-6Qli4ugL8CUSYDpZifaVIWMAam6EdQEVPxceutjU9FtBtHn5TgOAeUBB5qW8GpzNMpIhcBzdQgk--bOOUoXIJx3RJOaLrc2U_OQN11p8Vx-Ppv-asaSgavngHEtZ6aqisWx5AJFlHUVUc5RiCMNQDZktQJL-j4y1Vko1gaM6ZKRAC7M703CsRiUPbqvaEAiLK03DkdARwgL2psmjgdflOyPhXScXIsZ9xXRhbYxWdRRnKBE6AoFgPVu1-shWROQP8qEARcylpOgVCo5_GHCQUZ4SzWgYFIooB14lxX1fqUMwHUAI4qL9mpchr6BRZlhRXBk0WSwObkHB_bDxN21Ior1MTmXmspE4m1mw2IqnEOOcgqRzUH-UPXwM1Do0zhI8LhjBjXXRMs4xIuY7LMCRb4ZP5kU7xVC2e-P0SFz2XZAF8nbIhnTdpPLjVe1qRixlxU8IdTdtWmPGGH8gwD9WRVKO1cJoSTuCpNWe2DhF1iYs7WOXODZmCAv-jk9nCuJCOrYQRn4bWDeYU2uMad14GUMggUjdcCX3raYP0Q54ylLphARuWfwVdD4qTmPbHobbafb3D9T3GI-8sryM79zKT-h-vm18lqzCk2JqaMfadJ7kJYQislNuVDaqsGftQusw2typy0)
+
+[Components diagram TO BE "Телеметрия"](https://www.plantuml.com/plantuml/svg/XPHDRn9H58Rt_8ehAuXjP-FALJzCgacRq8hfaWp33HqxCtUySoU669DQFnhJ9ZLkNBWmkd4B1U902_w5C__8zmoNGjcOjE5-dFkyvvptm6PYN6tIC2Wzy2ClI5jI71iJ9uyTHxklDzg-EKwRQIArfo8Z8xFXgT290pVYD-k9QGL-qzbvj5xZenVxUqxe9aPg73LsL1YhYD_4p2_jWE3waTILuAIH-ckYJDyfoyzfab_GID2OkjIZZ2OqpC_Ak3wKhcTuGLzfIBrrHDnGXkK4zzK5xo2LgQo4hun1xFv1lIwebv_IbCOWdPRjOG7wGTFyhBZ911P308Tqou9ua546x8BRs5Pfr79rfs9a84DfTAVXCUNNwiFyIbHsLRLSVLCIugxkIf8s4LwVFmOuIKEfEPDTzN0vAHhGNs3USHFM1DRT_1GxRaP_JJHTxoJMCabIBP7XiaIibRUiKSCUWSgAsEvrYyODGFt4oJeGxE6_ZuFFt4_kgeEFAOgvjT5_vj4hYbh6Qbdn4Fl4DqftvdMfg3qJ_WPKKLP-wUJdwBUL4ZHW3_Bt42lSnEvwHSQDUK9WhUw8hTgp6LjK8caS7j3gGe2jXiI5e3wMtVm39CPC530P-hWit1gmUFvHeB89mivjDgCLuPUAJTjgjxLikoXhhknf5LMjNqCslN0jOyxCDmm1TJa7WFjthQxNzo3mjbGwb86TKHuBnXHfd-7DDTtaLpnB0gGfcsDj0U1kVAi5eNXhJQUVTcnlkIRRQhmRsTXPcFNBZnAfpRuRTOGZccbmSgHz8vbU-FLaMnpvMWhCZr6U2YoYQ8Obq9VxnQ6x-4DzefZJ0Mx6xCCIqrBiznsM_jyqXvVenoNNnWUCUrglrvvR62YBb7ulXWgzixwCd6KVx7JTIwgqAQCM_oZz0m00)
+
+[Components diagram TO BE "Сценарии"](https://www.plantuml.com/plantuml/svg/TPJ1Jjj048RlUOfjJeaA-D9JJvI0QAKYXH3KOsISLR3gUDFrkXMgAWMZ5bMHYjHZUw0WLRqQIYGd4FCAis_KcRLnJ9GgbztPp3Sp__xUzK3PKeLzh_B4zHqlx79sgDGWU6vPqlwmrdFLONWG1bmwmbVSLskEw5i3p_OfPpLGNSyzi1hFLfiKsjzvRVNjG769eKv3z0V2fvm1yIiD9DYkpsNDUzi9tHLMXP-Gw5EOwH5C64mXXYj8O0PZ7LNnkCLjHz42Vi4ORl1ugYD8zP3fO_q5GpE8zH0IN5rNwtF-RiX3Nkk_KmfpTtRRRGPN-ByKfaWULlEW0L-Q_B_umnCzMg4kKhY36DatUeJKERQp8KA_QykZMk1mtvQkw3Z4k7ZKIy9gsw9UhN-iC5OeKBC7DEzUdiTUD5zH-Mt1QZvN5YbUfq2ZjR-vP3XiwrwVe3Ytk4UPy3pHPzXSkGJtUzWboHPwd6sPNLR4J7gEi1Yk8K58REaJVOoB50D8ib3SCKomS6G2Y-Z0EUHTf4epGxv-6C2Hmgzd9GWDCmGCYQo_KhSMCcEOeAP6uGMov0DH4gQ5sy1LGXvbzASxmkzb_Vys_S-CC2ZA4fKO91Y5r8oHwZEOBHa5lOoqhVUutf1kjyVpGeKZpY55DUunzPYaPbJ1OD538mGZSlbriCSYmWGhVwfKMjnxy3kQOD7CkLIuCrDPk9p2hVwcJny6fQPUjjlDFSGHoq18jl_RXLACS9iRx8qhEMjAeOGZl1nXD2Zi0XVbsHYrfYEiZwDHQtH_OvnqR6umoZoUWp96qGxyqL5nFsM7mSHQl1YObBfSm6Lt13_ANwBXcV9feN4CTyN7R0Xbeyxdkvpxppmrs5lq-BFFi-d5AAf_rv_92VhCs7YyO85ItSewzxlqmFq3)
 
 **Диаграмма кода (Code)**
 
-Добавьте одну диаграмму или несколько.
+[Code diagram TO BE](https://www.plantuml.com/plantuml/svg/RPJDJjj04CVlUOfjJeuAyQKdJhIXGaXGGXBQ8zhOgx2IxNNjDH0X909gUw1IFrIfKY-LsagzcfIeQGh9Ayo-KMVNZWak4eVrx7z___aOiXfB6id4zoeFUE1uYSl8lfHXl6BR4JsizxZSJxf9p2971985iku8tmuz6kWtox5qFTwr6u-McpgqkxLf-pIMBCBGNaFueGZqcr3pAmqaK1wmQE-9I0ANHdtBfm7jiJrdYLJXEypKAQGmXBymWXiOmuYeSpLGPnYUmXzzmiiKhc5Ch7LHgzR8SOMGmiQY8KVGu-R62cbkjpl4Tja1TrXi7tFtnCR4qSwDgwXP5yGAcBHrgJKTW6ymLMzW0Yc1eNg5VbUGLcjtyDW4ZKFrck6si--CPo0VCEdVcFf83PQnYYdyme1cjbdWDZB_4lI0UjobKaJuFbSyduSMo5zD3uP8FjL06qscUBo657sqQQfUmrYz8tWxrM4KNAcBabd4Gb6atyAFcADDF-_8GzBUsTJdHcjtxPxMbs3o2AMTeoqpmiLStwFOv82FCKs3UKki5xXAFEWSrKeSaSYkqAnjSsWcNO_7-tU8dx6U6POtG8uQ8FnINQ29gNT8Ci1_fNgqNq1R-ci1-0CPDwQXgMRCr3bScaPEYaOYU6kdqq7ioSBghdKjjuk4feXbBsAcOMRmdx8jCXjye-S14mt2LSK_p3ND332M5WdVOdSIbZ3BVoabKhGjWKlJ-ecUU3KF6eilY_EzVqeLB3VxPxXTMVYeBZ2jgH7e--9gSGFpCxCStwsLXMRWyoaUr-lrax8Yto_i2a6dcTdMD6j3MLfCdOOX2roB7U3KvfOPn-tcB2li7VA8pM_dJytznhFsqrOdnvML-H8O8Vo4iPd3I9tbyhkglFjXjd-M525tbaBQzmGrlQYiOfxwX-mV)
 
 # Задание 3. Разработка ER-диаграммы
 
-Добавьте сюда ER-диаграмму. Она должна отражать ключевые сущности системы, их атрибуты и тип связей между ними.
+[ER-диаграмма](https://www.plantuml.com/plantuml/svg/lLTFRnj55B_lftZAnNPLnm8a3bOLbIX12eG6I2jnGB8cth4zpUwCsHt7XBXIceZcG4KkFI4aH3bm3IPBd9IOhp3x5VWal9aTJtQpLkeBNKVQ-VFUs_VxlJypUHXB4ib167WLMFzo3QeRl2EYa4WcEAppBkEKHentWGkPBJQW7ObX9OQE4BBcnRkCzqb4GWXGLkxtAOX8zeI71klrEgXVr5IzIL-g2toFrLbwf1BrHar0_vtZsj_gJ0jwb4iczs5fhWBEl-RLGKoZkBO490OpX0SFFXUnx4Pq-ulDbHKuy03k0VEX2K-URApX3Etg9HeI5k3gu_Ml7fk5FedZeOZyLe_4lPiDJaBgPeYJ4adz5f6u9bb8aQkmBx_pddatthuo4ARfz_Y-I4_LPVeSFHwhAVhR4-XcJmI-TThD5_Uyw94OSXgrd1X01QeVVmhrbOoFPURNxeDsH_sbalG82KwFrH-QxlHmncRw4im4AOKbOt09r1ZI4nHBrBLrFraK_-zEhOIw5T9mnqNCJkOZlz79St3Fm6gLQ8b4C2C5igUIKJCYViZuQ8_H8OrGyAbWV2u0bvs_QSSr7ovmjxBnPzmwpp8GqkEoD0BswHvhqrOeV1fOi6QyU9JtAFT5b4zGOo2NYgHFTbZ09ACnhdwolVLe5PSxB0g79AAjFMIM2MuL2W4g8vmwdwstThAOk_EZPMAGfQBRrVbu0wOW2pdv0dseKgf3Z9eSnFc0kw1ptNH6ejCnx-NbPHGFI2nRCQMy67JDek0TrdNyvLdwAUj4wbgTcvYsHHWIFYjSErkS8Ol9xSn3xEWnJTEXxPFzG13VUNaN_cy6T43zKOmmHgIzYyCEOG7rxofU02r-LqsyDXqwGJuIapcJz1IgdmdU5MkhjK9rp1D5yYGDQ4XbjDz29tp6kvP6juuyMdkEn8ohhPsdj2qt_BSpcJx7tm_uyIbshciSNOAwmYhzCJq1ZE9PYMHDe8-KQCouelrWRRsu9jg3417DB1-Wds6_2Uz_iFpUVS2SWcSeJwICIj9MFefZreJwXqxyXijVqnSgqVveSjIao5vnynAPYzkKauW9IvYR_c-bMQmq_DfEGBNYwjRMvlf7ZnOz1LuR17_YBqaF4GTos-swrczd2wDmkFCW70gtQq7aoWVoJyLuEye2FQ9xwAo6-6q_ed6kMJhfjUtDXYuvq-PrOgcnpcSFoZdeTAfy40IQingUjPXzfpQl6kPpzVGepuksUElkaBYcF549yaRQ4ZspjDd9ksRDDhiH5v9rzaT3kjCJOXTLp3KlV_n84dMfR9NeoVDIQddvub1Zl35TsClWbQc3SsG2AqAVj_YU6dOcU2rTppfFnTxy_ZryvMuKECvbDhQg9iRmn32Ug0j00sVs4lGYFQxVkkXCQrvcqJoZKRqk3fnbV9gpIO_rOo_tcRU9egjEMhleJjc62yKyUrQglEEqZ6bpMkRDUcObWr4qXU9sgELpJRZXpZNFYkQKdLXvpwcXPUULiUqAlJ5BNizvxRIjq9mjfrJms2aqx3PKiPB-mTuvmRVB5SoUKtSgw6G2lOQPPG9jJWbKk6gWNdPcZL4xcNUdczOAc4N1QunoB0PHc-Pol2pkQXUQjahoujv3odtzFzT_)
 
 # Задание 4. Создание и документирование API
 
 ### 1. Тип API
 
-Укажите, какой тип API вы будете использовать для взаимодействия микросервисов. Объясните своё решение.
+1) Асинхронный API для интеграции с устройствами, MQTT. 
+Обоснование: так как это легкий протокол обмена данными, специально разработанный для передачи телеметрических данных между устройствами с низким уровнем производительности и ограниченными ресурсами
+2) Синхронный API для клиент-сервер, для межсервесного взаимодействия.
+Обоснование: проста интеграция, совместимо с вебом/мобилками, кэширование.
 
 ### 2. Документация API
 
-Здесь приложите ссылки на документацию API для микросервисов, которые вы спроектировали в первой части проектной работы. Для документирования используйте Swagger/OpenAPI или AsyncAPI.
+1) [AsyncAPI](https://github.com/foxy-gal/architecture-warmhouse/blob/warmhouse/asyncapi.json) 
+2) [OpenAPI](https://github.com/foxy-gal/architecture-warmhouse/blob/warmhouse/openapi.yaml)
 
 # Задание 5. Работа с docker и docker-compose
 
