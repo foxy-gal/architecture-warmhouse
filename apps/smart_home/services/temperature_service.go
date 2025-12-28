@@ -38,7 +38,7 @@ func NewTemperatureService(baseURL string) *TemperatureService {
 // GetTemperature fetches temperature data for a specific location
 func (s *TemperatureService) GetTemperature(location string) (*TemperatureResponse, error) {
 	url := fmt.Sprintf("%s/temperature?location=%s", s.BaseURL, location)
-
+    
 	resp, err := s.HTTPClient.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching temperature data: %w", err)
@@ -60,7 +60,7 @@ func (s *TemperatureService) GetTemperature(location string) (*TemperatureRespon
 // GetTemperatureByID fetches temperature data for a specific sensor ID
 func (s *TemperatureService) GetTemperatureByID(sensorID string) (*TemperatureResponse, error) {
 	url := fmt.Sprintf("%s/temperature/%s", s.BaseURL, sensorID)
-
+    
 	resp, err := s.HTTPClient.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching temperature data: %w", err)
@@ -68,7 +68,7 @@ func (s *TemperatureService) GetTemperatureByID(sensorID string) (*TemperatureRe
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unexpected status code: %d, %s", resp.StatusCode, url)
 	}
 
 	var temperatureResp TemperatureResponse
